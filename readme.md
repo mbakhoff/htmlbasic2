@@ -12,83 +12,7 @@ The web app must also meet these requirements:
 * The data must be stored on disk in regular files.
   It is recommended to process the files using DataOutputStream/DataInputStream.
   You can use one file for the thread names and a separate file for each thread.
-* The webapp must implement a custom template engine for rendering the pages.
 * All HTTP responses must contain appropriate HTTP headers.
-
-## Template engines
-
-Web pages often contain dynamic content - some information that can change.
-When writing the html for such pages, the parts that will change must be replaced with placeholders.
-A html page with placeholders is called a template.
-When the page is requested, then some code (called the template engine or template renderer) will process the template and replace the placeholders with actual values.
-
-Different template engines exist for Java.
-We are going to write our own template engine to better understand how they work.
-The template engine should have a method `String render(String templateName, Map<String, Object> context)`.
-The render method should load the requested template, process it and return the final result.
-The template is a regular html file with two exceptions, as follows.
-
-### Variable substitution
-
-The template can include placeholders in the form `${variableName}` which will be replaced with the values taken from the `context` map.
-
-Example:
-
-The template file *example.html*:
-```html
-<p>Hello user ${user}</p>
-<p>The time is ${time}</p>
-```
-The servlet code:
-```java
-Map<String, Object> context = new HashMap<>();
-context.put("user", "mbakhoff");
-context.put("time", Instant.now());
-render("example.html", context);
-```
-
-The example should render something like
-```html
-<p>Hello user mbakhoff</p>
-<p>The time is 2017-07-22T14:35:38.107Z</p>
-```
-
-### Repeating sections using `<block>`
-
-The block element can be used for rendering a collection of items from the context map.
-The element works like a for-each loop, repeating the contents of the block for each element of the collection.
-The element must contain a single attribute *each* that is used to select the collection and assign a name to the loop variable: `<block each="item:collection"></block>`
-The loop variable must be usable inside the block as if it was set in the context map.
-
-Example:
-
-The template file *example.html*:
-```html
-<ul>
-<block each="prime:primes">
-  <li>${prime}</li>
-</block>
-</ul>
-```
-The servlet code:
-```java
-Map<String, Object> context = new HashMap<>();
-context.put("primes", Arrays.asList(3, 5, 7));
-render("example.html", context);
-```
-
-The example should render exactly this:
-```html
-<ul>
-  <li>3</li>
-  <li>5</li>
-  <li>7</li>
-</ul>
-```
-
-A block element doesn't need to support nesting other block elements inside it.
-
-Hint: you must cast the collection from `Object` to `List<Object>` when you take it from the context.
 
 ## HTTP headers
 
@@ -147,7 +71,8 @@ Implement the forum.
    The data should be handled by `POST /`.
    The browser should be redirected to `/threads/threadName` after the `POST` (see headers).
 3. `GET /threads/threadName` should show all the posts in the forum thread with the given name.
-   Create a separate servlet and template for this.
+   Create a separate servlet for this.
+   If the thread is not found, then send a status 404 response.
 4. `GET /threads/threadName` should include a form for adding a new post to the given thread.
    The data should be handled by `POST /threads/threadName`.
    The response shouldn't be a redirect, but should instead immediately render the same view as `GET /threads/threadName`.
@@ -155,5 +80,9 @@ Implement the forum.
 
 Additionally:
 * Each response should have the Content-Type and Content-Length headers set.
-* The pages should be simple enough that our template engine can handle them.
 * Each page should include a css stylesheet (can be shared between the pages) to make it look reasonable.
+
+Hints:
+* Send `GET` requests using `<a>` elements.
+* Send `POST` requests using `<form>` elements.
+* Writing HTML in a servlet is ugly - we'll see how to get rid of it in the next tutorial.
