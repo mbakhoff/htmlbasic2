@@ -78,6 +78,8 @@ Implement the forum.
    The response shouldn't be a redirect, but should instead immediately render the same view as `GET /threads/threadName`.
 5. Each forum thread name showed on `GET /` should be a link to the corresponding `/threads/threadName` view.
 
+Note that `threadName` is a variable. If you have threads "apples" and "oranges", then you could `GET /threads/apples` or `POST /threads/oranges`.
+
 Additionally:
 * Each response should have the Content-Type and Content-Length headers set.
 * Each page should include a css stylesheet (can be shared between the pages) to make it look reasonable.
@@ -85,4 +87,15 @@ Additionally:
 Hints:
 * Send `GET` requests using `<a>` elements.
 * Send `POST` requests using `<form>` elements.
+* Data sent from `doGet` and `doPost` using `getWriter`/`getOutputStream` is rendered in the browser.
+* `HttpServletRequest` objects contain the Request-URI, request headers and the request body sent by the browser.
+  You cannot set headers manually when sending requests using `<a>` or `<form>`.
+* `HttpServletResponse` contains the response code, response headers and the response body sent by the server.
+  You can set all those values manually in the servlet.
+* Each request ja response are completely independency and don't know anything about earlier request or responses.
 * Writing HTML in a servlet is ugly - we'll see how to get rid of it in the next tutorial.
+* You can debug the servlets from the IDE.
+  Open the maven toolbar, find plugins, jetty, jetty-run; right click and select Debug.
+  See [IntelliJ docs](https://www.jetbrains.com/help/idea/maven-projects-tool-window.html) if you can't find it.
+* You don't need to create a new servlet for each thread.
+  Recall from the previous tutorial the wildcard servlet mapping `@WebServlet("/users/*")`.
