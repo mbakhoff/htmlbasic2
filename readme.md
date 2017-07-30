@@ -88,7 +88,7 @@ Hints:
 * Send `GET` requests using `<a>` elements.
 * Send `POST` requests using `<form>` elements.
 * Data sent from `doGet` and `doPost` using `getWriter`/`getOutputStream` is rendered in the browser.
-* `HttpServletRequest` objects contain the Request-URI, request headers and the request body sent by the browser.
+* `HttpServletRequest` objects contain the Request-URI (`getRequestURI`), request headers `getHeader` and the request body `getInputStream` sent by the browser.
   You cannot set headers manually when sending requests using `<a>` or `<form>`.
 * `HttpServletResponse` contains the response code, response headers and the response body sent by the server.
   You can set all those values manually in the servlet.
