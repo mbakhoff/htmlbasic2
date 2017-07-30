@@ -99,3 +99,6 @@ Hints:
   See [IntelliJ docs](https://www.jetbrains.com/help/idea/maven-projects-tool-window.html) if you can't find it.
 * You don't need to create a new servlet for each thread.
   Recall from the previous tutorial the wildcard servlet mapping `@WebServlet("/users/*")`.
+* Don't use `<br/>` for vertical spacing.
+  Use padding and margin instead.
+* Learn new CSS properties: `border`, `color`, `background-color`, `border-radius`, `box-shadow`.
